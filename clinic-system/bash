@@ -1,0 +1,17 @@
+# ١. دروستکردنی فۆلدەر
+mkdir clinic-system
+cd clinic-system
+
+# ٢. دروستکردنی فایلە سەرەکییەکان
+touch index.html app.js schema.sql vercel.json
+
+# ٣. کۆپیکردنی ناوەڕۆکی فایلەکان
+# (ناوەڕۆکی هەر فایلێک کۆپی بکە لە کۆدەکانی سەرەوە)
+
+# ٤. بارکردن لەسەر GitHub
+git init
+git add .
+git commit -m "سیستەمی سادەی عیادە"
+git branch -M main
+git remote add origin https://github.com/<username>/<repo-name>.git
+git push -u origin main
