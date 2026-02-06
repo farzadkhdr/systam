@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ku">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستەمی بەڕێوەبردنی عیادە</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .sidebar { background-color: #2c3e50; min-height: 100vh; }
+        .sidebar a { color: white; text-decoration: none; padding: 10px; display: block; }
+        .sidebar a:hover { background-color: #34495e; }
+        .content { padding: 20px; }
+        .card { margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- بەشی لایەنی -->
+            <div class="col-md-3 col-lg-2 sidebar p-0">
+                <div class="p-4">
+                    <h2 class="text-white text-center mb-4">
+                        <i class="bi bi-heart-pulse"></i> عیادە
+                    </h2>
+                </div>
+                <nav>
+                    <a href="#patients" class="p-3 active" onclick="showSection('patients')">
+                        <i class="bi bi-people-fill"></i> نەخۆشەکان
+                    </a>
+                    <a href="#appointments" class="p-3" onclick="showSection('appointments')">
+                        <i class="bi bi-calendar-check"></i> ژوانەکان
+                    </a>
+                    <a href="#add-patient" class="p-3" onclick="showSection('add-patient')">
+                        <i class="bi bi-person-plus"></i> نەخۆشی تازە
+                    </a>
+                    <a href="#add-appointment" class="p-3" onclick="showSection('add-appointment')">
+                        <i class="bi bi-calendar-plus"></i> ژوانی تازە
+                    </a>
+                </nav>
+            </div>
+
+            <!-- بەشی سەرەکی -->
+            <div class="col-md-9 col-lg-10 ms-auto content">
+                <!-- ئامارەکان -->
+                <div class="row mb-4" id="stats">
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h5 class="card-title">کۆی نەخۆشەکان</h5>
+                                <h2 id="total-patients">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h5 class="card-title">ژوانەکان</h5>
+                                <h2 id="total-appointments">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- بەشەکان -->
+                <div id="sections">
+                    <!-- بەشی نەخۆشەکان -->
+                    <section id="patients-section" class="section">
+                        <h3>لیستی نەخۆشەکان</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ناو</th>
+                                        <th>تەمەن</th>
+                                        <th>ڕەگەز</th>
+                                        <th>ژمارە مۆبایل</th>
+                                        <th>کردارەکان</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="patients-table"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- بەشی ژوانەکان -->
+                    <section id="appointments-section" class="section d-none">
+                        <h3>لیستی ژوانەکان</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ناوی نەخۆش</th>
+                                        <th>بەروار</th>
+                                        <th>کات</th>
+                                        <th>هۆکار</th>
+                                        <th>بار</th>
+                                        <th>کردارەکان</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="appointments-table"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- بەشی زیادکردنی نەخۆشی تازە -->
+                    <section id="add-patient-section" class="section d-none">
+                        <h3>زیادکردنی نەخۆشی تازە</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="add-patient-form">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label">ناوی تەواو</label>
+                                                <input type="text" class="form-control" id="name" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="age" class="form-label">تەمەن</label>
+                                                <input type="number" class="form-control" id="age" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="gender" class="form-label">ڕەگەز</label>
+                                                <select class="form-select" id="gender" required>
+                                                    <option value="">هەڵبژاردن</option>
+                                                    <option value="نێر">نێر</option>
+                                                    <option value="مێ">مێ</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label">ژمارە مۆبایل</label>
+                                                <input type="tel" class="form-control" id="phone">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">ناونیشان</label>
+                                        <textarea class="form-control" id="address" rows="2"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save"></i> پاشەکەوت کردن
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- بەشی زیادکردنی ژوانی تازە -->
+                    <section id="add-appointment-section" class="section d-none">
+                        <h3>زیادکردنی ژوانی تازە</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <form id="add-appointment-form">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="patient-select" class="form-label">نەخۆش</label>
+                                                <select class="form-select" id="patient-select" required></select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="date" class="form-label">بەروار</label>
+                                                <input type="date" class="form-control" id="date" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="time" class="form-label">کات</label>
+                                                <input type="time" class="form-control" id="time" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="status" class="form-label">بار</label>
+                                                <select class="form-select" id="status" required>
+                                                    <option value="pending">چاوەڕوان</option>
+                                                    <option value="confirmed">دیاریکراو</option>
+                                                    <option value="cancelled">هەڵوەشاوە</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="reason" class="form-label">هۆکاری ژوان</label>
+                                        <textarea class="form-control" id="reason" rows="3" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-calendar-plus"></i> زیادکردنی ژوان
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
