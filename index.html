@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕۆژی لەدایک بوونت پیرۆز - دادە</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 30%, #1a1a2e 60%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Naskh Arabic', 'Segoe UI', Tahoma, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, #d4af37, #c9a050, #e6c86e);
+            color: #0d1117;
+            border: none;
+            padding: 28px 55px;
+            font-size: 30px;
+            font-family: 'Noto Naskh Arabic', sans-serif;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.7);
+            animation: pulse 2s infinite;
+            transition: all 0.4s ease;
+            letter-spacing: 2px;
+        }
+
+        .start-button:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 70px rgba(255, 215, 0, 0.9), 0 0 120px rgba(212, 175, 55, 0.5);
+            background: linear-gradient(135deg, #e6c86e, #ffd700, #ffed4a);
+        }
+
+        .start-hint {
+            color: rgba(255, 215, 0, 0.7);
+            font-size: 18px;
+            font-family: 'Noto Naskh Arabic', sans-serif;
+            animation: fadeHint 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeHint {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.3); }
+            25% { opacity: 0.4; transform: scale(0.7); }
+            50% { opacity: 1; transform: scale(1.3); }
+            75% { opacity: 0.4; transform: scale(0.7); }
+        }
+
+        .shooting-star {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.8);
+            animation: shoot linear infinite;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+            border-radius: 50%;
+        }
+
+        @keyframes shoot {
+            0% { transform: translate(0, 0) rotate(-35deg); opacity: 0; }
+            5% { opacity: 1; }
+            15% { transform: translate(-400px, 300px) rotate(-35deg); opacity: 0; }
+            100% { transform: translate(-400px, 300px) rotate(-35deg); opacity: 0; }
+        }
+
+        .moon {
+            position: fixed;
+            top: 35px;
+            right: 60px;
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle at 55% 35%, #fff8dc, #e8c860, #c9a040);
+            border-radius: 50%;
+            box-shadow: 0 0 70px rgba(255, 220, 100, 0.7), 0 0 140px rgba(255, 200, 50, 0.5);
+            animation: moonGlow 4s ease-in-out infinite, moonFloat 6s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .moon-crater {
+            position: absolute;
+            background: rgba(180, 140, 60, 0.4);
+            border-radius: 50%;
+        }
+
+        .crater-1 { width: 20px; height: 20px; top: 30px; left: 35px; }
+        .crater-2 { width: 14px; height: 14px; top: 55px; left: 60px; }
+        .crater-3 { width: 10px; height: 10px; top: 25px; left: 70px; }
+
+        @keyframes moonGlow {
+            0%, 100% { box-shadow: 0 0 70px rgba(255, 220, 100, 0.7), 0 0 140px rgba(255, 200, 50, 0.5); }
+            50% { box-shadow: 0 0 100px rgba(255, 240, 130, 0.9), 0 0 180px rgba(255, 220, 80, 0.7); }
+        }
+
+        @keyframes moonFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+            filter: blur(25px);
+            animation: cloudFloat linear infinite;
+        }
+
+        @keyframes cloudFloat {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100px); }
+        }
+
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .heart {
+            position: absolute;
+            animation: floatUpHeart var(--float-duration) linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUpHeart {
+            0% { transform: translateY(105vh) scale(0.3) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-15vh) scale(1.6) rotate(360deg); opacity: 0; }
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 850px;
+            background: rgba(13, 17, 23, 0.55);
+            border-radius: 35px;
+            padding: 45px 35px;
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(212, 175, 55, 0.25);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(212, 175, 55, 0.04);
+            animation: containerGlow 5s ease-in-out infinite;
+            margin: 20px;
+        }
+
+        @keyframes containerGlow {
+            0%, 100% { border-color: rgba(212, 175, 55, 0.25); }
+            50% { border-color: rgba(212, 175, 55, 0.55); }
+        }
+
+        .title-section {
+            text-align: center;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInDown 1.5s ease-out forwards;
+        }
+
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d4af37, #ffd700, #e6c86e, #c9a050);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: goldShine 4s ease-in-out infinite;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-container {
+            text-align: right;
+            direction: rtl;
+            min-height: 300px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 25px 30px;
+            border-right: 4px solid rgba(212, 175, 55, 0.4);
+        }
+
+        .typed-text {
+            font-size: 21px;
+            color: #f0e4c8;
+            line-height: 2.1;
+            text-shadow: 0 0 12px rgba(255, 210, 100, 0.3);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 26px;
+            background: #ffd700;
+            animation: blink 0.7s infinite;
+            margin-right: 3px;
+            vertical-align: middle;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
+
+        .divider {
+            width: 150px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 30px auto;
+            border-radius: 50%;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; width: 0; }
+            to { opacity: 1; width: 150px; }
+        }
+
+        .big-text-container {
+            margin-top: 40px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 2s ease;
+            position: relative;
+        }
+
+        .big-text-container.visible {
+            opacity: 1;
+            animation: fadeInUpBig 2s ease-out forwards;
+        }
+
+        @keyframes fadeInUpBig {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .big-text {
+            font-size: 55px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #d4af37, #ffec8b, #ffb347, #ffcc00, #e6c86e);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: goldShine 3s ease-in-out infinite;
+            line-height: 1.6;
+            letter-spacing: 3px;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.5));
+        }
+
+        @keyframes goldShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .final-heart {
+            font-size: 60px;
+            animation: heartBeat 1s ease-in-out infinite;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .final-heart.visible { opacity: 1; }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.3); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.25); }
+            60% { transform: scale(1); }
+        }
+
+        .lantern {
+            position: fixed;
+            top: 15px;
+            font-size: 55px;
+            animation: swing 3.5s ease-in-out infinite;
+            z-index: 0;
+            opacity: 0.75;
+            filter: drop-shadow(0 0 20px rgba(255, 160, 20, 0.7));
+        }
+
+        .lantern-left { left: 35px; animation-delay: 0s; }
+        .lantern-right { right: 35px; animation-delay: 1.75s; }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-12deg); }
+            50% { transform: rotate(12deg); }
+        }
+
+        .rose-petal {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            animation: petalFall linear infinite;
+        }
+
+        @keyframes petalFall {
+            0% { transform: translateY(-10vh) rotate(0deg) translateX(0px); opacity: 1; }
+            30% { transform: translateY(30vh) rotate(120deg) translateX(80px); opacity: 0.85; }
+            70% { transform: translateY(70vh) rotate(250deg) translateX(-40px); opacity: 0.5; }
+            100% { transform: translateY(110vh) rotate(360deg) translateX(-100px); opacity: 0; }
+        }
+
+        .audio-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 100;
+            background: rgba(13, 17, 23, 0.8);
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 50px;
+            padding: 12px 22px;
+            color: #d4af37;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(15px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Naskh Arabic', sans-serif;
+            font-size: 15px;
+        }
+
+        .audio-control:hover {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: #ffd700;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .audio-control button {
+            background: none;
+            border: none;
+            color: #d4af37;
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .audio-control button:hover { transform: scale(1.2); }
+
+        .sound-notice {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            background: rgba(212, 175, 55, 0.9);
+            color: #0d1117;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-family: 'Noto Naskh Arabic', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            display: none;
+            animation: slideDown 0.5s ease-out;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5);
+        }
+
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .big-text { font-size: 38px; line-height: 1.5; }
+            .typed-text { font-size: 16px; line-height: 1.9; }
+            .main-container { padding: 25px 15px; margin: 10px; }
+            .title { font-size: 26px; }
+            .moon { width: 65px; height: 65px; top: 20px; right: 25px; }
+            .start-button { font-size: 22px; padding: 20px 35px; }
+            .lantern { font-size: 35px; }
+            .lantern-left { left: 10px; }
+            .lantern-right { right: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sound-notice" id="soundNotice">🔊 تکایە دەنگی ئامێرەکەت بەرز کەرەوە</div>
+
+    <div class="start-overlay" id="startOverlay">
+        <div style="font-size: 80px; animation: heartBeat 1.2s ease-in-out infinite;">🎂</div>
+        <button class="start-button" id="startButton">✨ بکلیکە بۆ دەستپێکردن ✨</button>
+        <div class="start-hint">🎵 کلیک بکە و گۆرانیەکە دەستپێدەکات</div>
+    </div>
+
+    <div id="youtubePlayer" style="position: fixed; top: -9999px; left: -9999px; width: 1px; height: 1px; opacity: 0; pointer-events: none;"></div>
+
+    <div class="audio-control" id="audioControl" style="display: none;">
+        <span>🎵</span>
+        <span>گۆرانی</span>
+        <button id="toggleMusic">⏯️</button>
+        <span id="volumeIcon">🔊</span>
+    </div>
+
+    <div class="stars" id="starsContainer"></div>
+    <div id="shootingStarsContainer"></div>
+    <div class="clouds" id="cloudsContainer"></div>
+
+    <div class="moon">
+        <div class="moon-crater crater-1"></div>
+        <div class="moon-crater crater-2"></div>
+        <div class="moon-crater crater-3"></div>
+    </div>
+
+    <div class="lantern lantern-right">🏮</div>
+    <div class="lantern lantern-left">🏮</div>
+
+    <div class="hearts-container" id="heartsContainer"></div>
+    <div id="petalsContainer"></div>
+
+    <div class="main-container">
+        <div class="title-section">
+            <h1 class="title">🎂 ڕۆژی لەدایک بوونت پیرۆز 🎂</h1>
+        </div>
+
+        <div class="message-container">
+            <p class="typed-text" id="typedMessage"></p>
+            <span class="cursor" id="cursor"></span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="big-text-container" id="bigTextContainer">
+            <p class="big-text">Dle Mn</p>
+        </div>
+
+        <div class="final-heart" id="finalHeart">💝</div>
+    </div>
+
+    <script>
+        const youtubeVideoId = "RPKTPGuij-Q";
+        const startTime = 0;
+        let isPlaying = true;
+
+        function createYouTubePlayer() {
+            const container = document.getElementById('youtubePlayer');
+            const iframe = document.createElement('iframe');
+            iframe.setAttribute('id', 'ytPlayer');
+            iframe.setAttribute('width', '1');
+            iframe.setAttribute('height', '1');
+            iframe.setAttribute('frameborder', '0');
+            iframe.setAttribute('allow', 'autoplay; encrypted-media');
+            iframe.setAttribute('allowfullscreen', '');
+            const src = `https://www.youtube.com/embed/${youtubeVideoId}?autoplay=0&controls=0&showinfo=0&rel=0&loop=1&playlist=${youtubeVideoId}&mute=0&enablejsapi=1&origin=${window.location.origin}&start=${startTime}`;
+            iframe.setAttribute('src', src);
+            container.appendChild(iframe);
+            iframe.addEventListener('load', function() {
+                console.log('✅ پلەیەر ئامادەیە');
+            });
+            return iframe;
+        }
+
+        function playMusic() {
+            const iframe = document.getElementById('ytPlayer');
+            if (iframe) {
+                iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                setTimeout(() => {
+                    iframe.contentWindow.postMessage('{"event":"command","func":"setVolume","args":[60]}', '*');
+                }, 1000);
+                console.log('🎵 گۆرانی دەستپێدەکات...');
+            }
+        }
+
+        function pauseMusic() {
+            const iframe = document.getElementById('ytPlayer');
+            if (iframe) {
+                iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            }
+        }
+
+        document.getElementById('toggleMusic').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (isPlaying) {
+                pauseMusic();
+                this.textContent = '▶️';
+                document.getElementById('volumeIcon').textContent = '🔇';
+            } else {
+                playMusic();
+                this.textContent = '⏯️';
+                document.getElementById('volumeIcon').textContent = '🔊';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        function startExperience() {
+            document.getElementById('startOverlay').style.display = 'none';
+            document.getElementById('audioControl').style.display = 'flex';
+            
+            const notice = document.getElementById('soundNotice');
+            notice.style.display = 'block';
+            setTimeout(() => { notice.style.display = 'none'; }, 4000);
+            
+            setTimeout(() => { playMusic(); }, 500);
+            
+            if (!window.animationsStarted) {
+                startAllAnimations();
+                window.animationsStarted = true;
+            }
+        }
+
+        const fullMessage = `ڕۆژی لە دایک بوونت پیرۆز بیت دادەی من\nیارەبی تەمەنت هەزار ساڵ بینتن\nخوا لۆمن و ئازیزانت بێلیت\nدلی من هەر نەخۆشیەکت دیتبیت لەو ساڵەدا\nلۆت ببیتە خۆشی دڵخۆشی\nمیوانی هەمیشەیت بیت رۆحی من\nباشە کە هەیت لەژیانم\nدوبارەو هەزار جار ڕۆژی لەدایک بوونت پیرۆز بیت\nخوشکە گەورەی من`;
+
+        const typedTextElement = document.getElementById('typedMessage');
+        const cursorElement = document.getElementById('cursor');
+        const bigTextContainer = document.getElementById('bigTextContainer');
+        const finalHeart = document.getElementById('finalHeart');
+
+        let charIndex = 0;
+        const typingSpeed = 65;
+
+        function typeMessage() {
+            if (charIndex < fullMessage.length) {
+                const currentChar = fullMessage.charAt(charIndex);
+                if (currentChar === '\n') {
+                    typedTextElement.innerHTML += '<br>';
+                } else {
+                    typedTextElement.innerHTML += currentChar;
+                }
+                charIndex++;
+                let delay = typingSpeed;
+                if (currentChar === ' ' || currentChar === '\n') {
+                    delay = typingSpeed + 35;
+                } else if (currentChar === '.' || currentChar === '،' || currentChar === '؟') {
+                    delay = typingSpeed + 180;
+                }
+                setTimeout(typeMessage, delay);
+                typedTextElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                cursorElement.style.display = 'none';
+                setTimeout(() => {
+                    bigTextContainer.classList.add('visible');
+                    setTimeout(() => { finalHeart.classList.add('visible'); }, 800);
+                }, 500);
+            }
+        }
+
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            for (let i = 0; i < 130; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                const size = Math.random() * 3.5 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.setProperty('--duration', (Math.random() * 4 + 2.5) + 's');
+                star.style.animationDelay = Math.random() * 6 + 's';
+                container.appendChild(star);
+            }
+        }
+
+        function createShootingStars() {
+            const container = document.getElementById('shootingStarsContainer');
+            setInterval(() => {
+                const shootingStar = document.createElement('div');
+                shootingStar.classList.add('shooting-star');
+                shootingStar.style.top = Math.random() * 50 + '%';
+                shootingStar.style.left = Math.random() * 80 + 10 + '%';
+                shootingStar.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                shootingStar.style.animationDelay = Math.random() * 8 + 's';
+                container.appendChild(shootingStar);
+                setTimeout(() => { shootingStar.remove(); }, 12000);
+            }, 5000);
+        }
+
+        function createClouds() {
+            const container = document.getElementById('cloudsContainer');
+            for (let i = 0; i < 8; i++) {
+                const cloud = document.createElement('div');
+                cloud.classList.add('cloud');
+                cloud.style.width = (Math.random() * 200 + 100) + 'px';
+                cloud.style.height = (Math.random() * 60 + 30) + 'px';
+                cloud.style.top = Math.random() * 80 + '%';
+                cloud.style.left = Math.random() * 100 + '%';
+                cloud.style.animationDuration = (Math.random() * 20 + 25) + 's';
+                cloud.style.animationDelay = Math.random() * 15 + 's';
+                container.appendChild(cloud);
+            }
+        }
+
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            const hearts = ['❤️', '💕', '💖', '💗', '💝', '💘', '💓', '💞', '✨', '🌟', '💫', '🕊️', '🌙', '💐', '🎂', '🎉'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 92 + '%';
+                heart.style.setProperty('--float-duration', (Math.random() * 4 + 3.5) + 's');
+                heart.style.fontSize = (Math.random() * 22 + 14) + 'px';
+                container.appendChild(heart);
+                setTimeout(() => { heart.remove(); }, 5000);
+            }, 280);
+        }
+
+        function createPetals() {
+            const container = document.getElementById('petalsContainer');
+            const petals = ['🌸', '🌷', '💮', '🏵️', '🌺', '🌹', '🥀', '💐', '🍂', '🌿'];
+            setInterval(() => {
+                const petal = document.createElement('div');
+                petal.classList.add('rose-petal');
+                petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+                petal.style.left = Math.random() * 95 + '%';
+                petal.style.top = '-5%';
+                petal.style.fontSize = (Math.random() * 16 + 14) + 'px';
+                petal.style.animationDuration = (Math.random() * 6 + 7) + 's';
+                container.appendChild(petal);
+                setTimeout(() => { petal.remove(); }, 10000);
+            }, 450);
+        }
+
+        function startAllAnimations() {
+            createStars();
+            createShootingStars();
+            createClouds();
+            createHearts();
+            createPetals();
+            setTimeout(() => { typeMessage(); }, 1200);
+        }
+
+        window.addEventListener('load', function() {
+            createYouTubePlayer();
+            document.getElementById('startButton').addEventListener('click', function(e) {
+                e.preventDefault();
+                startExperience();
+            });
+            document.getElementById('startOverlay').addEventListener('click', function(e) {
+                if (e.target === this || e.target.closest('.start-button')) {
+                    startExperience();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
